@@ -12,78 +12,79 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/member")
 public class MemberController {
     // 생성자 주입
     private final MemberService memberService;
     // 회원가입 페이지 출력 요청
-    @GetMapping("/member/save")
+    @GetMapping("/save")
     public String saveForm() {
-        return "save";
+        return "MemberSave";
     }
 
-    @PostMapping("/member/save")
+    @PostMapping("/save")
     public String save(@ModelAttribute MemberDTO memberDTO) {
         System.out.println("memberDTO = " + memberDTO);
         memberService.save(memberDTO);
-        return "login";
+        return "MemberLogin";
     }
-    @GetMapping("/member/login")
+    @GetMapping("/login")
     public String loginForm() {
-        return "login";
+        return "MemberLogin";
     }
-    @PostMapping("/member/login")
+    @PostMapping("/login")
     public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
         MemberDTO loginResult = memberService.login(memberDTO);
         if (loginResult != null) {
             // login 성공
             session.setAttribute("loginEmail", loginResult.getMemberEmail());
-            return "main";
+            return "MemberMain";
         } else {
             // login 실패
-            return "login";
+            return "MemberLogin";
         }
     }
-    @GetMapping("/member/")
+    @GetMapping("/")
     public String findAll(Model model) {
         List<MemberDTO> memberDTOList = memberService.findAll();
         // 어떠한 html로 가져갈 데이터가 있다면 model사용
         model.addAttribute("memberList", memberDTOList);
-        return "list";
+        return "MemberList";
     }
-    @GetMapping("/member/{id}")
+    @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model) {
         MemberDTO memberDTO = memberService.findById(id);
         model.addAttribute("member", memberDTO);
-        return "detail";
+        return "MemberDetail";
     }
 
-    @GetMapping("/member/update")
+    @GetMapping("/update")
     public String updateForm(HttpSession session, Model model) {
         String myEmail = (String) session.getAttribute("loginEmail");
         MemberDTO memberDTO = memberService.updateForm(myEmail);
         model.addAttribute("updateMember", memberDTO);
-        return "update";
+        return "MemberUpdate";
     }
 
-    @PostMapping("/member/update")
+    @PostMapping("/update")
     public String update(@ModelAttribute MemberDTO memberDTO) {
         memberService.update(memberDTO);
         return "redirect:/member/" + memberDTO.getId();
     }
 
-    @GetMapping("/member/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteById(@PathVariable Long id) {
         memberService.deleteById(id);
         return "redirect:/member/";
     }
 
-    @GetMapping("/member/logout")
+    @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "index";
+        return "MemberIndex";
     }
 
-    @PostMapping("/member/email-check")
+    @PostMapping("/email-check")
     public @ResponseBody String emailCheck(@RequestParam("memberEmail") String memberEmail) {
         System.out.println("memberEmail = " + memberEmail);
         String checkResult = memberService.emailCheck(memberEmail);
