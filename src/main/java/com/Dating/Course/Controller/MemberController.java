@@ -14,9 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
-    // 생성자 주입
     private final MemberService memberService;
-    // 회원가입 페이지 출력 요청
     @GetMapping("/save")
     public String saveForm() {
         return "MemberSave";

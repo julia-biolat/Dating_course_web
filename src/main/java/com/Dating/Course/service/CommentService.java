@@ -19,7 +19,6 @@ public class CommentService {
     private final BoardRepository boardRepository;
 
     public Long save(CommentDTO commentDTO) {
-        /* 부모엔티티(BoardEntity) 조회 */
         Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(commentDTO.getBoardId());
         if (optionalBoardEntity.isPresent()) {
             BoardEntity boardEntity = optionalBoardEntity.get();

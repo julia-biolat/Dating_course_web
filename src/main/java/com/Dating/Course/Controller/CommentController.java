@@ -1,7 +1,9 @@
 package com.Dating.Course.Controller;
 
 
+import com.Dating.Course.dto.BoardDTO;
 import com.Dating.Course.dto.CommentDTO;
+import com.Dating.Course.service.BoardService;
 import com.Dating.Course.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

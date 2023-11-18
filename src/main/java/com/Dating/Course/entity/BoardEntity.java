@@ -34,6 +34,9 @@ public class BoardEntity extends BaseEntity {
     private int boardHits;
 
     @Column
+    private Integer heartHits;
+
+    @Column
     private int fileAttached; // 1 or 0
 
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -49,6 +52,7 @@ public class BoardEntity extends BaseEntity {
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardHits(0);
+        boardEntity.setHeartHits(0);
         boardEntity.setFileAttached(0); // 파일 없음.
         return boardEntity;
     }
@@ -61,6 +65,7 @@ public class BoardEntity extends BaseEntity {
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardHits(boardDTO.getBoardHits());
+        boardEntity.setHeartHits(boardDTO.getHeartHits());
         return boardEntity;
     }
 
@@ -71,6 +76,7 @@ public class BoardEntity extends BaseEntity {
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardHits(0);
+        boardEntity.setHeartHits(0);
         boardEntity.setFileAttached(1); // 파일 있음.
         return boardEntity;
     }

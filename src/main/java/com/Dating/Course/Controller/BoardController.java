@@ -29,7 +29,7 @@ public class BoardController {
 
     @PostMapping("/save")
     public String save(@ModelAttribute BoardDTO boardDTO) throws IOException {
-        System.out.println("boardDTO = " + boardDTO);
+        //System.out.println("boardDTO = " + boardDTO);
         boardService.save(boardDTO);
         return "BoardIndex";
     }
@@ -85,7 +85,7 @@ public class BoardController {
     public String paging(@PageableDefault(page = 1) Pageable pageable, Model model) {
 //        pageable.getPageNumber();
         Page<BoardDTO> boardList = boardService.paging(pageable);
-        int blockLimit = 5;
+        int blockLimit = 3;
         int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1; // 1 4 7 10 ~~
         int endPage = ((startPage + blockLimit - 1) < boardList.getTotalPages()) ? startPage + blockLimit - 1 : boardList.getTotalPages();
 
@@ -95,6 +95,22 @@ public class BoardController {
         model.addAttribute("endPage", endPage);
         return "BoardPaging";
 
+    }
+
+    @GetMapping("/heartgive/{id}")
+    public String heartGive(@PathVariable Long id, Model model,
+                           @PageableDefault(page=1) Pageable pageable) {
+
+        boardService.updateHeartHits(id);
+
+        BoardDTO boardDTO = boardService.findById(id);
+        List<CommentDTO> commentDTOList = commentService.findAll(id);
+        model.addAttribute("commentList", commentDTOList);
+        model.addAttribute("board", boardDTO);
+        model.addAttribute("page", pageable.getPageNumber());
+
+
+        return "BoardDetail";
     }
 
 }

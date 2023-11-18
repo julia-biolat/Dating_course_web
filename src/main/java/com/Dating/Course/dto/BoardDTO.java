@@ -20,6 +20,7 @@ public class BoardDTO {
     private String boardTitle;
     private String boardContents;
     private int boardHits;
+    private int heartHits;
     private LocalDateTime boardCreatedTime;
     private LocalDateTime boardUpdatedTime;
 
@@ -28,11 +29,12 @@ public class BoardDTO {
     private String storedFileName; // 서버 저장용 파일 이름
     private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
 
-    public BoardDTO(Long id, String boardWriter, String boardTitle, int boardHits, LocalDateTime boardCreatedTime) {
+    public BoardDTO(Long id, String boardWriter, String boardTitle, int boardHits, int heartHits, LocalDateTime boardCreatedTime) {
         this.id = id;
         this.boardWriter = boardWriter;
         this.boardTitle = boardTitle;
         this.boardHits = boardHits;
+        this.heartHits = heartHits;
         this.boardCreatedTime = boardCreatedTime;
     }
 
@@ -44,17 +46,14 @@ public class BoardDTO {
         boardDTO.setBoardTitle(boardEntity.getBoardTitle());
         boardDTO.setBoardContents(boardEntity.getBoardContents());
         boardDTO.setBoardHits(boardEntity.getBoardHits());
+        //boardDTO.setHeartHits(boardEntity.getHeartHits());
+        boardDTO.setHeartHits(boardEntity.getHeartHits() != null ? boardEntity.getHeartHits().intValue() : 0);
         boardDTO.setBoardCreatedTime(boardEntity.getCreatedTime());
         boardDTO.setBoardUpdatedTime(boardEntity.getUpdatedTime());
         if (boardEntity.getFileAttached() == 0) {
             boardDTO.setFileAttached(boardEntity.getFileAttached()); // 0
         } else {
             boardDTO.setFileAttached(boardEntity.getFileAttached()); // 1
-            // 파일 이름을 가져가야 함.
-            // orginalFileName, storedFileName : board_file_table(BoardFileEntity)
-            // join
-            // select * from board_table b, board_file_table bf where b.id=bf.board_id
-            // and where b.id=?
             boardDTO.setOriginalFileName(boardEntity.getBoardFileEntityList().get(0).getOriginalFileName());
             boardDTO.setStoredFileName(boardEntity.getBoardFileEntityList().get(0).getStoredFileName());
         }
